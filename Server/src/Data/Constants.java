@@ -21,9 +21,7 @@ public class Constants {
     public static class Query {
         public static final String SHOW_VARIABLES = "SHOW VARIABLES";
         public static final String SELECT_STUDENT = "SELECT * FROM ssu.student";
-        public static final String SET_MAX_CONNECTIONS_140 = "SET GLOBAL max_connections = 140";
-        public static final String SET_MAX_CONNECTIONS_150 = "SET GLOBAL max_connections = 150";
-        public static final String INSERT_STUDENT = "INSERT INTO ssu.student(`id`, `name`, `age`) VALUES(20192762, '박수빈', 25)";
+        public static final String INSERT_STUDENT = "INSERT INTO ssu.student(`id`, `name`, `age`) VALUES(20192762, '박수빈', 26)";
         public static final String REMOVE_STUDENT = "DELETE FROM ssu.student WHERE `id` = 20192762";
     }
 

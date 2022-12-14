@@ -14,10 +14,8 @@ public class Main implements Runnable {
         DBManager.get();
         MonitoringManager.get();
 
-        System.out.println("1 : DB의 MaxConnections 값을 140으로 내립니다.");
-        System.out.println("2 : DB의 MaxConnections 값을 150으로 올립니다.");
-        System.out.println("3 : DB에 박수빈 Student를 Insert합니다.");
-        System.out.println("4 : DB에 박수빈 Student를 Remove합니다.");
+        System.out.println("1 : DB에 박수빈 Student를 Insert합니다.");
+        System.out.println("2 : DB에 박수빈 Student를 Delete합니다.");
 
         // SMTP Thread
         new Thread(() -> {

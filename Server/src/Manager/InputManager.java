@@ -16,18 +16,6 @@ public class InputManager {
 
             switch (input) {
                 case 1:
-                    // Max Connection 140 으로
-                    System.out.println(Constants.Query.SET_MAX_CONNECTIONS_140);
-                    DBManager.get().query(Constants.Query.SET_MAX_CONNECTIONS_140);
-                    System.out.println("Success Set Max Connections to 140");
-                    break;
-                case 2:
-                    // Max Connection 150 으로
-                    System.out.println(Constants.Query.SET_MAX_CONNECTIONS_150);
-                    DBManager.get().query(Constants.Query.SET_MAX_CONNECTIONS_150);
-                    System.out.println("Success Set Max Connections to 150");
-                    break;
-                case 3:
                     // 20192762 박수빈 학생 추가
                     System.out.println(Constants.Query.INSERT_STUDENT);
                     if (DBManager.get().queryAndIsSuccess(Constants.Query.INSERT_STUDENT))
@@ -35,7 +23,7 @@ public class InputManager {
                     else
                          System.out.println("Fail Insert Student");
                     break;
-                case 4:
+                case 2:
                     // 20192762 박수빈 학생 삭제
                     System.out.println(Constants.Query.REMOVE_STUDENT);
                     if (DBManager.get().queryAndIsSuccess(Constants.Query.REMOVE_STUDENT))

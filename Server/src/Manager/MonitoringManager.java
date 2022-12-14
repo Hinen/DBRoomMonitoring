@@ -12,7 +12,7 @@ public class MonitoringManager {
     private static MonitoringManager singleton = new MonitoringManager();
     public static MonitoringManager get() { return singleton; }
 
-    private static final int STANDARD_MAX_CONNECTION = 150;
+    private static final int STANDARD_MAX_CONNECTION = 4030;
 
     private Map<String, String> statusMap = new HashMap<>();
     private List<StudentModel> studentModelList;
@@ -20,7 +20,7 @@ public class MonitoringManager {
     private MonitoringManager() {
         System.out.println("Initializing Manager.MonitoringManager...");
 
-        // MAX_CONNECTIONS은 150을 기준으로
+        // MAX_CONNECTIONS은 4030을 기준으로
         statusMap.put(Constants.StatusKey.MAX_CONNECTIONS, Integer.toString(STANDARD_MAX_CONNECTION));
 
         // 기존 학생들 추가
