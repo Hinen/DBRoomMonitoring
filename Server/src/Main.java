@@ -1,7 +1,4 @@
-import Manager.DBManager;
-import Manager.InputManager;
-import Manager.MonitoringManager;
-import Manager.SMTPManager;
+import Manager.*;
 
 public class Main implements Runnable {
     public static void main(String[] args) {
@@ -12,6 +9,7 @@ public class Main implements Runnable {
         // Manager Init
         SMTPManager.get();
         DBManager.get();
+        SerialManager.get();
         MonitoringManager.get();
 
         System.out.println("1 : DB에 박수빈 Student를 Insert합니다.");
