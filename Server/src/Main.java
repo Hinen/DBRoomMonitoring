@@ -52,7 +52,7 @@ public class Main implements Runnable {
             MonitoringManager.get().start();
 
             try {
-                Thread.sleep(10000);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 System.out.println(e);
             }
