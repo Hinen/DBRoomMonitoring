@@ -41,6 +41,7 @@ public class SerialManager {
 
     public class SerialReader implements Runnable {
         private InputStream inputStream;
+        private StringBuilder inputBuilder = new StringBuilder();
 
         public SerialReader(InputStream inputStream) {
             this.inputStream = inputStream;
@@ -52,11 +53,22 @@ public class SerialManager {
 
             try {
                 while ((len = inputStream.read(buffer)) > -1) {
-                    System.out.print(new String(buffer, 0, len));
+                    String str = new String(buffer, 0, len);
+                    inputBuilder.append(str);
+
+                    if (str.contains(System.lineSeparator())) {
+                        readDone(inputBuilder.toString());
+                        inputBuilder.delete(0, inputBuilder.length());
+                    }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+
+        private void readDone(String str) {
+            str = str.replace(System.lineSeparator(), "");
+            System.out.println(str);
         }
     }
 }
