@@ -35,8 +35,6 @@ public class SerialManager {
         } catch (Exception | UnsatisfiedLinkError e) {
             if (e instanceof Exception)
                 SMTPManager.get().addMail((Exception) e);
-            else if (e instanceof UnsatisfiedLinkError)
-                System.out.println("SerialManager UnsatisfiedLinkError : " + e);
         }
     }
 
