@@ -12,8 +12,6 @@ public class MonitoringManager {
     private static MonitoringManager singleton = new MonitoringManager();
     public static MonitoringManager get() { return singleton; }
 
-    private static final int STANDARD_MAX_CONNECTION = 4030;
-
     private Map<String, String> statusMap = new HashMap<>();
     private List<StudentModel> studentModelList;
 
@@ -21,7 +19,7 @@ public class MonitoringManager {
         System.out.println("Initializing Manager.MonitoringManager...");
 
         // MAX_CONNECTIONS은 4030을 기준으로
-        statusMap.put(Constants.StatusKey.MAX_CONNECTIONS, Integer.toString(STANDARD_MAX_CONNECTION));
+        statusMap.put(Constants.StatusKey.MAX_CONNECTIONS, Integer.toString(Constants.MonitoringConfig.STANDARD_MAX_CONNECTION));
 
         // 기존 학생들 추가
         studentModelList = StudentModel.getStudentList();
@@ -32,6 +30,7 @@ public class MonitoringManager {
 
         checkVariables();
         checkStudents();
+        CheckRoomLDRValue();
     }
 
     private void checkVariables() {
@@ -52,7 +51,7 @@ public class MonitoringManager {
             return;
 
         int beforeValue = Integer.parseInt(statusMap.get(Constants.StatusKey.MAX_CONNECTIONS));
-        if (beforeValue >= STANDARD_MAX_CONNECTION && value < STANDARD_MAX_CONNECTION) {
+        if (beforeValue >= Constants.MonitoringConfig.STANDARD_MAX_CONNECTION && value < Constants.MonitoringConfig.STANDARD_MAX_CONNECTION) {
             SMTPManager.get().addMail(
                     "DB Max Connection 문제 발생_" + DateManager.get().getNowTime(),
                     "Monitoring DB Host : " + Constants.DBConfig.DB_HOST + "\n" +
@@ -63,7 +62,7 @@ public class MonitoringManager {
                     Constants.MonitoringType.MAX_CONNECTION_ERROR
             );
         }
-        else if (beforeValue < STANDARD_MAX_CONNECTION && value >= STANDARD_MAX_CONNECTION) {
+        else if (beforeValue < Constants.MonitoringConfig.STANDARD_MAX_CONNECTION && value >= Constants.MonitoringConfig.STANDARD_MAX_CONNECTION) {
             SMTPManager.get().addMail(
                     "DB Max Connection 정상 복구_" + DateManager.get().getNowTime(),
                     "Monitoring DB Host : " + Constants.DBConfig.DB_HOST + "\n" +
@@ -134,5 +133,42 @@ public class MonitoringManager {
         }
 
         return false;
+    }
+
+    private void CheckRoomLDRValue() {
+        int ldrValue = SerialManager.get().getLDRValue();
+
+        // wait for init
+        if (ldrValue < 0)
+            return;
+
+        if (!statusMap.containsKey(Constants.StatusKey.ROOM_LDR))
+            statusMap.put(Constants.StatusKey.ROOM_LDR, Integer.toString(ldrValue));
+
+        int beforeValue = Integer.parseInt(statusMap.get(Constants.StatusKey.ROOM_LDR));
+        if (beforeValue <= Constants.MonitoringConfig.STANDARD_ROOM_LDR && ldrValue > Constants.MonitoringConfig.STANDARD_ROOM_LDR) {
+            SMTPManager.get().addMail(
+                    "Room LDR 증가 발생_" + DateManager.get().getNowTime(),
+                    "Monitoring DB Host : " + Constants.DBConfig.DB_HOST + "\n" +
+                            "Check Time : " + DateManager.get().getNowTime() + "\n\n" +
+                            "Before LDR Value : " + beforeValue + "\n" +
+                            "Now LDR Value : " + ldrValue + "\n\n" +
+                            "위와 같이 LDR Value 값이 증가 했으므로 모니터링 결과를 공유합니다.\n",
+                    Constants.MonitoringType.ROOM_LDR_ERROR
+            );
+        }
+        else if (beforeValue > Constants.MonitoringConfig.STANDARD_ROOM_LDR && ldrValue <= Constants.MonitoringConfig.STANDARD_ROOM_LDR) {
+            SMTPManager.get().addMail(
+                    "Room LDR 정상 복구_" + DateManager.get().getNowTime(),
+                    "Monitoring DB Host : " + Constants.DBConfig.DB_HOST + "\n" +
+                            "Check Time : " + DateManager.get().getNowTime() + "\n\n" +
+                            "Before LDR Value : " + beforeValue + "\n" +
+                            "Now LDR Value : " + ldrValue + "\n\n" +
+                            "위와 같이 LDR Value 값이 정상 복구 했으므로 모니터링 결과를 공유합니다.",
+                    Constants.MonitoringType.ROOM_LDR_NORMAL
+            );
+        }
+
+        statusMap.put(Constants.StatusKey.ROOM_LDR, Integer.toString(ldrValue));
     }
 }

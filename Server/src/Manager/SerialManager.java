@@ -12,6 +12,8 @@ public class SerialManager {
     private static SerialManager singleton = new SerialManager();
     public static SerialManager get() { return singleton; }
 
+    private int ldrValue = -1;
+
     private SerialManager() {
         System.out.println("Initializing Manager.SerialManager...");
 
@@ -68,7 +70,19 @@ public class SerialManager {
 
         private void readDone(String str) {
             str = str.replace(System.lineSeparator(), "");
-            System.out.println(str);
+            str = str.trim();
+
+            if (str.startsWith("ldr : ")) {
+                try {
+                    ldrValue = Integer.parseInt(str.substring("ldr : ".length()));
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            }
         }
+    }
+
+    public int getLDRValue() {
+        return ldrValue;
     }
 }

@@ -22,6 +22,11 @@ public class Constants {
         public static final int SERIAL_PORT_BIT = 9600;
     }
 
+    public static class MonitoringConfig {
+        public static final int STANDARD_MAX_CONNECTION = 4030;
+        public static final int STANDARD_ROOM_LDR = 150;
+    }
+
     public static class Query {
         public static final String SHOW_VARIABLES = "SHOW VARIABLES";
         public static final String SELECT_STUDENT = "SELECT * FROM ssu.student";
@@ -31,6 +36,7 @@ public class Constants {
 
     public static class StatusKey {
         public static final String MAX_CONNECTIONS = "max_connections";
+        public static final String ROOM_LDR = "room_ldr";
     }
 
     public static class SMTPTarget {
@@ -49,6 +55,8 @@ public class Constants {
         public static final int MAX_CONNECTION_NORMAL = 6;
         public static final int NEW_STUDENT = 7;
         public static final int REMOVE_STUDENT = 8;
+        public static final int ROOM_LDR_ERROR = 9;
+        public static final int ROOM_LDR_NORMAL = 10;
 
         public static String getMonitoringTypeStr(int type) {
             if (type == SERVER_ERROR)
@@ -67,6 +75,10 @@ public class Constants {
                 return "New Student";
             else if (type == REMOVE_STUDENT)
                 return "Remove Student";
+            else if (type == ROOM_LDR_ERROR)
+                return "Room LDR Value Error";
+            else if (type == ROOM_LDR_NORMAL)
+                return "Room LDR Value Normal";
 
             return "";
         }
