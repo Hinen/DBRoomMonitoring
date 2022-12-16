@@ -17,6 +17,11 @@ public class Constants {
         public static final String DB_CONNECTION_OPTION = "autoReconnect=true&useSSL=false";
     }
 
+    public static class SerialConfig {
+        public static final String SERIAL_PORT = "/dev/ttyACM0";
+        public static final int SERIAL_PORT_BIT = 9600;
+    }
+
     public static class Query {
         public static final String SHOW_VARIABLES = "SHOW VARIABLES";
         public static final String SELECT_STUDENT = "SELECT * FROM ssu.student";

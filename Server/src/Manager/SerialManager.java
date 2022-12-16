@@ -1,5 +1,6 @@
 package Manager;
 
+import Data.Constants;
 import gnu.io.CommPort;
 import gnu.io.CommPortIdentifier;
 import gnu.io.SerialPort;
@@ -15,11 +16,11 @@ public class SerialManager {
         System.out.println("Initializing Manager.SerialManager...");
 
         try {
-            System.setProperty("gnu.io.rxtx.SerialPorts", "/dev/ttyACM0");
-            CommPortIdentifier portIdentifier = CommPortIdentifier.getPortIdentifier("/dev/ttyACM0");
+            System.setProperty("gnu.io.rxtx.SerialPorts", Constants.SerialConfig.SERIAL_PORT);
+            CommPortIdentifier portIdentifier = CommPortIdentifier.getPortIdentifier(Constants.SerialConfig.SERIAL_PORT);
 
             if (portIdentifier.isCurrentlyOwned()) {
-                System.out.println("SerialManager Error : 이미 사용 중인 포트입니다.");
+                System.out.println("SerialManager Error : 이미 사용 중인 포트입니다. (" );
             } else {
                 CommPort commPort = portIdentifier.open(this.getClass().getName(), 2000);
 
@@ -27,7 +28,7 @@ public class SerialManager {
                     System.out.println("SerialManager Error : commPort is not SerialPort");
 
                 SerialPort serialPort = (SerialPort) commPort;
-                serialPort.setSerialPortParams(9600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
+                serialPort.setSerialPortParams(Constants.SerialConfig.SERIAL_PORT_BIT, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
 
                 InputStream in = serialPort.getInputStream();
                 new Thread(new SerialReader(in)).start();
