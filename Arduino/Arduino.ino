@@ -26,6 +26,5 @@ void writeLDR() {
       ? 255 
       : ldrValue;
   
-  Serial.print("ldr : ");
-  Serial.println(ldrValue);
+  Serial.println("ldr : " + String(ldrValue));
 }
