@@ -64,25 +64,30 @@ public class MonitoringManager {
             return;
 
         int standardMaxConnection = configMap.get(Constants.MonitoringConfigKey.STANDARD_MAX_CONNECTION).value;
-        int beforeValue = Integer.parseInt(statusMap.get(Constants.StatusKey.MAX_CONNECTIONS));
 
-        if (beforeValue >= standardMaxConnection && value < standardMaxConnection) {
+        if (!statusMap.containsKey(Constants.StatusKey.OLD_STANDARD_MAX_CONNECTIONS))
+            statusMap.put(Constants.StatusKey.OLD_STANDARD_MAX_CONNECTIONS, Integer.toString(standardMaxConnection));
+
+        int oldStandardMaxConnection = Integer.parseInt(statusMap.get(Constants.StatusKey.OLD_STANDARD_MAX_CONNECTIONS));
+        int oldValue = Integer.parseInt(statusMap.get(Constants.StatusKey.MAX_CONNECTIONS));
+
+        if (oldValue >= oldStandardMaxConnection && value < standardMaxConnection) {
             SMTPManager.get().addMail(
                     "DB Max Connection 문제 발생_" + DateManager.get().getNowTime(),
                     "Monitoring DB Host : " + Constants.DBConfig.DB_HOST + "\n" +
                             "Check Time : " + DateManager.get().getNowTime() + "\n\n" +
-                            "Before MaxConnection : " + beforeValue + "\n" +
+                            "Old MaxConnection : " + oldValue + "\n" +
                             "Now MaxConnection : " + value + "\n\n" +
                             "위와 같이 MaxConnection 값에 문제가 발생했으므로 모니터링 결과를 공유합니다.",
                     Constants.MonitoringType.MAX_CONNECTION_ERROR
             );
         }
-        else if (beforeValue < standardMaxConnection && value >= standardMaxConnection) {
+        else if (oldValue < oldStandardMaxConnection && value >= standardMaxConnection) {
             SMTPManager.get().addMail(
                     "DB Max Connection 정상 복구_" + DateManager.get().getNowTime(),
                     "Monitoring DB Host : " + Constants.DBConfig.DB_HOST + "\n" +
                             "Check Time : " + DateManager.get().getNowTime() + "\n\n" +
-                            "Before MaxConnection : " + beforeValue + "\n" +
+                            "Old MaxConnection : " + oldValue + "\n" +
                             "Now MaxConnection : " + value + "\n\n" +
                             "위와 같이 MaxConnection 값이 정상 복구 했으므로 모니터링 결과를 공유합니다.",
                     Constants.MonitoringType.MAX_CONNECTION_NORMAL
@@ -90,6 +95,7 @@ public class MonitoringManager {
         }
 
         statusMap.put(Constants.StatusKey.MAX_CONNECTIONS, valueStr);
+        statusMap.put(Constants.StatusKey.OLD_STANDARD_MAX_CONNECTIONS, Integer.toString(standardMaxConnection));
     }
 
     private void checkStudents() {
@@ -157,29 +163,34 @@ public class MonitoringManager {
         if (ldrValue < 0)
             return;
 
+        int standardRoomLDR = configMap.get(Constants.MonitoringConfigKey.STANDARD_ROOM_LDR).value;
+
         if (!statusMap.containsKey(Constants.StatusKey.ROOM_LDR))
             statusMap.put(Constants.StatusKey.ROOM_LDR, Integer.toString(ldrValue));
 
-        int standardRoomLDR = configMap.get(Constants.MonitoringConfigKey.STANDARD_ROOM_LDR).value;
-        int beforeValue = Integer.parseInt(statusMap.get(Constants.StatusKey.ROOM_LDR));
+        if (!statusMap.containsKey(Constants.StatusKey.OLD_STANDARD_ROOM_LDR))
+            statusMap.put(Constants.StatusKey.OLD_STANDARD_ROOM_LDR, Integer.toString(standardRoomLDR));
 
-        if (beforeValue <= standardRoomLDR && ldrValue > standardRoomLDR) {
+        int oldStandardRoomLDR = Integer.parseInt(statusMap.get(Constants.StatusKey.OLD_STANDARD_ROOM_LDR));
+        int oldValue = Integer.parseInt(statusMap.get(Constants.StatusKey.ROOM_LDR));
+
+        if (oldValue <= oldStandardRoomLDR && ldrValue > standardRoomLDR) {
             SMTPManager.get().addMail(
                     "Room LDR 증가 발생_" + DateManager.get().getNowTime(),
                     "Monitoring DB Host : " + Constants.DBConfig.DB_HOST + "\n" +
                             "Check Time : " + DateManager.get().getNowTime() + "\n\n" +
-                            "Before LDR Value : " + beforeValue + "\n" +
+                            "Old LDR Value : " + oldValue + "\n" +
                             "Now LDR Value : " + ldrValue + "\n\n" +
                             "위와 같이 LDR Value 값이 증가 했으므로 모니터링 결과를 공유합니다.\n",
                     Constants.MonitoringType.ROOM_LDR_ERROR
             );
         }
-        else if (beforeValue > standardRoomLDR && ldrValue <= standardRoomLDR) {
+        else if (oldValue > oldStandardRoomLDR && ldrValue <= standardRoomLDR) {
             SMTPManager.get().addMail(
                     "Room LDR 정상 복구_" + DateManager.get().getNowTime(),
                     "Monitoring DB Host : " + Constants.DBConfig.DB_HOST + "\n" +
                             "Check Time : " + DateManager.get().getNowTime() + "\n\n" +
-                            "Before LDR Value : " + beforeValue + "\n" +
+                            "Old LDR Value : " + oldValue + "\n" +
                             "Now LDR Value : " + ldrValue + "\n\n" +
                             "위와 같이 LDR Value 값이 정상 복구 했으므로 모니터링 결과를 공유합니다.",
                     Constants.MonitoringType.ROOM_LDR_NORMAL
@@ -187,6 +198,7 @@ public class MonitoringManager {
         }
 
         statusMap.put(Constants.StatusKey.ROOM_LDR, Integer.toString(ldrValue));
+        statusMap.put(Constants.StatusKey.OLD_STANDARD_ROOM_LDR, Integer.toString(standardRoomLDR));
     }
 
     private void CheckRoomTemperatureValue() {
@@ -196,29 +208,34 @@ public class MonitoringManager {
         if (tempValue < 0)
             return;
 
+        int standardRoomTemperature = configMap.get(Constants.MonitoringConfigKey.STANDARD_ROOM_TEMPERATURE).value;
+
         if (!statusMap.containsKey(Constants.StatusKey.ROOM_TEMPERATURE))
             statusMap.put(Constants.StatusKey.ROOM_TEMPERATURE, Float.toString(tempValue));
 
-        int standardRoomTemperature = configMap.get(Constants.MonitoringConfigKey.STANDARD_ROOM_TEMPERATURE).value;
-        float beforeValue = Float.parseFloat(statusMap.get(Constants.StatusKey.ROOM_TEMPERATURE));
+        if (!statusMap.containsKey(Constants.StatusKey.OLD_STANDARD_ROOM_TEMPERATURE))
+            statusMap.put(Constants.StatusKey.OLD_STANDARD_ROOM_TEMPERATURE, Float.toString(standardRoomTemperature));
 
-        if (beforeValue <= standardRoomTemperature && tempValue > standardRoomTemperature) {
+        float oldStandardRoomTemperature = Float.parseFloat(statusMap.get(Constants.StatusKey.OLD_STANDARD_ROOM_TEMPERATURE));
+        float oldValue = Float.parseFloat(statusMap.get(Constants.StatusKey.ROOM_TEMPERATURE));
+
+        if (oldValue <= oldStandardRoomTemperature && tempValue > standardRoomTemperature) {
             SMTPManager.get().addMail(
                     "Room 온도 문제 발생_" + DateManager.get().getNowTime(),
                     "Monitoring DB Host : " + Constants.DBConfig.DB_HOST + "\n" +
                             "Check Time : " + DateManager.get().getNowTime() + "\n\n" +
-                            "Before Temperature Value : " + beforeValue + "\n" +
+                            "Old Temperature Value : " + oldValue + "\n" +
                             "Now Temperature Value : " + tempValue + "\n\n" +
                             "위와 같이 온도 값이 정상치를 넘었으므로 모니터링 결과를 공유합니다.\n",
                     Constants.MonitoringType.ROOM_TEMPERATURE_ERROR
             );
         }
-        else if (beforeValue > standardRoomTemperature && tempValue <= standardRoomTemperature) {
+        else if (oldValue > oldStandardRoomTemperature && tempValue <= standardRoomTemperature) {
             SMTPManager.get().addMail(
                     "Room 온도 정상 복구_" + DateManager.get().getNowTime(),
                     "Monitoring DB Host : " + Constants.DBConfig.DB_HOST + "\n" +
                             "Check Time : " + DateManager.get().getNowTime() + "\n\n" +
-                            "Before Temperature Value : " + beforeValue + "\n" +
+                            "Old Temperature Value : " + oldValue + "\n" +
                             "Now Temperature Value : " + tempValue + "\n\n" +
                             "위와 같이 온도 값이 정상 복구 했으므로 모니터링 결과를 공유합니다.",
                     Constants.MonitoringType.ROOM_TEMPERATURE_NORMAL
@@ -226,6 +243,7 @@ public class MonitoringManager {
         }
 
         statusMap.put(Constants.StatusKey.ROOM_TEMPERATURE, Float.toString(tempValue));
+        statusMap.put(Constants.StatusKey.OLD_STANDARD_ROOM_TEMPERATURE, Float.toString(standardRoomTemperature));
     }
 
     private void CheckRoomHumidityValue() {
@@ -235,29 +253,34 @@ public class MonitoringManager {
         if (humiValue < 0)
             return;
 
+        int standardRoomHumidity = configMap.get(Constants.MonitoringConfigKey.STANDARD_ROOM_HUMIDITY).value;
+
         if (!statusMap.containsKey(Constants.StatusKey.ROOM_HUMIDITY))
             statusMap.put(Constants.StatusKey.ROOM_HUMIDITY, Float.toString(humiValue));
 
-        int standardRoomHumidity = configMap.get(Constants.MonitoringConfigKey.STANDARD_ROOM_HUMIDITY).value;
-        float beforeValue = Float.parseFloat(statusMap.get(Constants.StatusKey.ROOM_HUMIDITY));
+        if (!statusMap.containsKey(Constants.StatusKey.OLD_STANDARD_ROOM_HUMIDITY))
+            statusMap.put(Constants.StatusKey.OLD_STANDARD_ROOM_HUMIDITY, Float.toString(standardRoomHumidity));
 
-        if (beforeValue <= standardRoomHumidity && humiValue > standardRoomHumidity) {
+        float oldStandardRoomHumidity = Float.parseFloat(statusMap.get(Constants.StatusKey.OLD_STANDARD_ROOM_HUMIDITY));
+        float oldValue = Float.parseFloat(statusMap.get(Constants.StatusKey.ROOM_HUMIDITY));
+
+        if (oldValue <= oldStandardRoomHumidity && humiValue > standardRoomHumidity) {
             SMTPManager.get().addMail(
                     "Room 습도 문제 발생_" + DateManager.get().getNowTime(),
                     "Monitoring DB Host : " + Constants.DBConfig.DB_HOST + "\n" +
                             "Check Time : " + DateManager.get().getNowTime() + "\n\n" +
-                            "Before Humidity Value : " + beforeValue + "\n" +
+                            "Old Humidity Value : " + oldValue + "\n" +
                             "Now Humidity Value : " + humiValue + "\n\n" +
                             "위와 같이 습도 값이 정상치를 넘었으므로 모니터링 결과를 공유합니다.\n",
                     Constants.MonitoringType.ROOM_HUMIDITY_ERROR
             );
         }
-        else if (beforeValue > standardRoomHumidity && humiValue <= standardRoomHumidity) {
+        else if (oldValue > oldStandardRoomHumidity && humiValue <= standardRoomHumidity) {
             SMTPManager.get().addMail(
-                    "Room LDR 정상 복구_" + DateManager.get().getNowTime(),
+                    "Room 습도 정상 복구_" + DateManager.get().getNowTime(),
                     "Monitoring DB Host : " + Constants.DBConfig.DB_HOST + "\n" +
                             "Check Time : " + DateManager.get().getNowTime() + "\n\n" +
-                            "Before Humidity Value : " + beforeValue + "\n" +
+                            "Old Humidity Value : " + oldValue + "\n" +
                             "Now Humidity Value : " + humiValue + "\n\n" +
                             "위와 같이 습도 값이 정상 복구 했으므로 모니터링 결과를 공유합니다.",
                     Constants.MonitoringType.ROOM_HUMIDITY_NORMAL
@@ -265,5 +288,6 @@ public class MonitoringManager {
         }
 
         statusMap.put(Constants.StatusKey.ROOM_HUMIDITY, Float.toString(humiValue));
+        statusMap.put(Constants.StatusKey.OLD_STANDARD_ROOM_HUMIDITY, Float.toString(standardRoomHumidity));
     }
 }

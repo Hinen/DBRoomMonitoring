@@ -39,9 +39,16 @@ public class Constants {
 
     public static class StatusKey {
         public static final String MAX_CONNECTIONS = "max_connections";
+        public static final String OLD_STANDARD_MAX_CONNECTIONS = "old_standard__max_connections";
+
         public static final String ROOM_LDR = "room_ldr";
+        public static final String OLD_STANDARD_ROOM_LDR = "old_standard_room_ldr";
+
         public static final String ROOM_TEMPERATURE = "room_temperature";
+        public static final String OLD_STANDARD_ROOM_TEMPERATURE = "old_standard_room_temperature";
+
         public static final String ROOM_HUMIDITY = "room_humidity";
+        public static final String OLD_STANDARD_ROOM_HUMIDITY = "old_standard_room_humidity";
     }
 
     public static class SMTPTarget {
