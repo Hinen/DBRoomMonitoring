@@ -31,6 +31,8 @@ public class MonitoringManager {
         checkVariables();
         checkStudents();
         CheckRoomLDRValue();
+        CheckRoomTemperatureValue();
+        CheckRoomHumidityValue();
     }
 
     private void checkVariables() {
@@ -170,5 +172,79 @@ public class MonitoringManager {
         }
 
         statusMap.put(Constants.StatusKey.ROOM_LDR, Integer.toString(ldrValue));
+    }
+
+    private void CheckRoomTemperatureValue() {
+        float tempValue = SerialManager.get().getTemperatureValue();
+
+        // wait for init
+        if (tempValue < 0)
+            return;
+
+        if (!statusMap.containsKey(Constants.StatusKey.ROOM_TEMPERATURE))
+            statusMap.put(Constants.StatusKey.ROOM_TEMPERATURE, Float.toString(tempValue));
+
+        float beforeValue = Float.parseFloat(statusMap.get(Constants.StatusKey.ROOM_TEMPERATURE));
+        if (beforeValue <= Constants.MonitoringConfig.STANDARD_ROOM_TEMPERATURE && tempValue > Constants.MonitoringConfig.STANDARD_ROOM_TEMPERATURE) {
+            SMTPManager.get().addMail(
+                    "Room 온도 문제 발생_" + DateManager.get().getNowTime(),
+                    "Monitoring DB Host : " + Constants.DBConfig.DB_HOST + "\n" +
+                            "Check Time : " + DateManager.get().getNowTime() + "\n\n" +
+                            "Before Temperature Value : " + beforeValue + "\n" +
+                            "Now Temperature Value : " + tempValue + "\n\n" +
+                            "위와 같이 온도 값이 정상치를 넘었으므로 모니터링 결과를 공유합니다.\n",
+                    Constants.MonitoringType.ROOM_TEMPERATURE_ERROR
+            );
+        }
+        else if (beforeValue > Constants.MonitoringConfig.STANDARD_ROOM_TEMPERATURE && tempValue <= Constants.MonitoringConfig.STANDARD_ROOM_TEMPERATURE) {
+            SMTPManager.get().addMail(
+                    "Room 온도 정상 복구_" + DateManager.get().getNowTime(),
+                    "Monitoring DB Host : " + Constants.DBConfig.DB_HOST + "\n" +
+                            "Check Time : " + DateManager.get().getNowTime() + "\n\n" +
+                            "Before Temperature Value : " + beforeValue + "\n" +
+                            "Now Temperature Value : " + tempValue + "\n\n" +
+                            "위와 같이 온도 값이 정상 복구 했으므로 모니터링 결과를 공유합니다.",
+                    Constants.MonitoringType.ROOM_TEMPERATURE_NORMAL
+            );
+        }
+
+        statusMap.put(Constants.StatusKey.ROOM_TEMPERATURE, Float.toString(tempValue));
+    }
+
+    private void CheckRoomHumidityValue() {
+        float humiValue = SerialManager.get().getHumidityValue();
+
+        // wait for init
+        if (humiValue < 0)
+            return;
+
+        if (!statusMap.containsKey(Constants.StatusKey.ROOM_HUMIDITY))
+            statusMap.put(Constants.StatusKey.ROOM_HUMIDITY, Float.toString(humiValue));
+
+        float beforeValue = Float.parseFloat(statusMap.get(Constants.StatusKey.ROOM_HUMIDITY));
+        if (beforeValue <= Constants.MonitoringConfig.STANDARD_ROOM_HUMIDITY && humiValue > Constants.MonitoringConfig.STANDARD_ROOM_HUMIDITY) {
+            SMTPManager.get().addMail(
+                    "Room 습도 문제 발생_" + DateManager.get().getNowTime(),
+                    "Monitoring DB Host : " + Constants.DBConfig.DB_HOST + "\n" +
+                            "Check Time : " + DateManager.get().getNowTime() + "\n\n" +
+                            "Before Humidity Value : " + beforeValue + "\n" +
+                            "Now Humidity Value : " + humiValue + "\n\n" +
+                            "위와 같이 습도 값이 정상치를 넘었으므로 모니터링 결과를 공유합니다.\n",
+                    Constants.MonitoringType.ROOM_HUMIDITY_ERROR
+            );
+        }
+        else if (beforeValue > Constants.MonitoringConfig.STANDARD_ROOM_HUMIDITY && humiValue <= Constants.MonitoringConfig.STANDARD_ROOM_HUMIDITY) {
+            SMTPManager.get().addMail(
+                    "Room LDR 정상 복구_" + DateManager.get().getNowTime(),
+                    "Monitoring DB Host : " + Constants.DBConfig.DB_HOST + "\n" +
+                            "Check Time : " + DateManager.get().getNowTime() + "\n\n" +
+                            "Before Humidity Value : " + beforeValue + "\n" +
+                            "Now Humidity Value : " + humiValue + "\n\n" +
+                            "위와 같이 습도 값이 정상 복구 했으므로 모니터링 결과를 공유합니다.",
+                    Constants.MonitoringType.ROOM_HUMIDITY_NORMAL
+            );
+        }
+
+        statusMap.put(Constants.StatusKey.ROOM_HUMIDITY, Float.toString(humiValue));
     }
 }

@@ -13,6 +13,8 @@ public class SerialManager {
     public static SerialManager get() { return singleton; }
 
     private int ldrValue = -1;
+    private float temperatureValue = -1;
+    private float humidityValue = -1;
 
     private SerialManager() {
         System.out.println("Initializing Manager.SerialManager...");
@@ -72,17 +74,30 @@ public class SerialManager {
             str = str.replace(System.lineSeparator(), "");
             str = str.trim();
 
-            if (str.startsWith("ldr : ")) {
-                try {
+            try {
+                if (str.startsWith("ldr : ")) {
                     ldrValue = Integer.parseInt(str.substring("ldr : ".length()));
-                } catch (Exception e) {
-                    System.out.println(e);
+                } else if (str.startsWith("temp : ")) {
+                    temperatureValue = Float.parseFloat(str.substring("temp : ".length()));
+                } else if (str.startsWith("humi : ")) {
+                    humidityValue = Float.parseFloat(str.substring("humi : ".length()));
                 }
+            }
+            catch (Exception e) {
+                System.out.println(e);
             }
         }
     }
 
     public int getLDRValue() {
         return ldrValue;
+    }
+
+    public float getTemperatureValue() {
+        return temperatureValue;
+    }
+
+    public float getHumidityValue() {
+        return humidityValue;
     }
 }

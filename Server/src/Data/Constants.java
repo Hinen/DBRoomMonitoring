@@ -25,6 +25,8 @@ public class Constants {
     public static class MonitoringConfig {
         public static final int STANDARD_MAX_CONNECTION = 4030;
         public static final int STANDARD_ROOM_LDR = 150;
+        public static final int STANDARD_ROOM_TEMPERATURE = 40; // TODO FIX
+        public static final int STANDARD_ROOM_HUMIDITY = 40; // TODO FIX
     }
 
     public static class Query {
@@ -37,6 +39,8 @@ public class Constants {
     public static class StatusKey {
         public static final String MAX_CONNECTIONS = "max_connections";
         public static final String ROOM_LDR = "room_ldr";
+        public static final String ROOM_TEMPERATURE = "room_temperature";
+        public static final String ROOM_HUMIDITY = "room_humidity";
     }
 
     public static class SMTPTarget {
@@ -57,6 +61,10 @@ public class Constants {
         public static final int REMOVE_STUDENT = 8;
         public static final int ROOM_LDR_ERROR = 9;
         public static final int ROOM_LDR_NORMAL = 10;
+        public static final int ROOM_TEMPERATURE_ERROR = 11;
+        public static final int ROOM_TEMPERATURE_NORMAL = 12;
+        public static final int ROOM_HUMIDITY_ERROR = 13;
+        public static final int ROOM_HUMIDITY_NORMAL = 14;
 
         public static String getMonitoringTypeStr(int type) {
             if (type == SERVER_ERROR)
@@ -79,6 +87,14 @@ public class Constants {
                 return "Room LDR Value Error";
             else if (type == ROOM_LDR_NORMAL)
                 return "Room LDR Value Normal";
+            else if (type == ROOM_TEMPERATURE_ERROR)
+                return "Room Temperature Value Error";
+            else if (type == ROOM_TEMPERATURE_NORMAL)
+                return "Room Temperature Value Normal";
+            else if (type == ROOM_HUMIDITY_ERROR)
+                return "Room Humidity Value Error";
+            else if (type == ROOM_HUMIDITY_NORMAL)
+                return "Room Humidity Value Normal";
 
             return "";
         }
