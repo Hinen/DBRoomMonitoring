@@ -38,8 +38,8 @@ void writeLDR() {
 void writeTempHumi() {
   dht.read(A1);
 
-  Serial.println("temp : " + String(dht.temperature));
-  Serial.println("humi : " + String(dht.humidity));
+  Serial.println("temp : " + String((float)dht.temperature));
+  Serial.println("humi : " + String((float)dht.humidity));
 
   delay(1000);
 }
