@@ -32,14 +32,15 @@ void writeLDR() {
   
   Serial.println("ldr : " + String(ldrValue));
 
-  delay(100);
+  delay(333);
 }
 
 void writeTempHumi() {
   dht.read(A1);
 
   Serial.println("temp : " + String((float)dht.temperature));
-  Serial.println("humi : " + String((float)dht.humidity));
+  delay(333);
 
-  delay(1000);
+  Serial.println("humi : " + String((float)dht.humidity));
+  delay(333);
 }
