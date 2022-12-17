@@ -22,15 +22,16 @@ public class Constants {
         public static final int SERIAL_PORT_BIT = 9600;
     }
 
-    public static class MonitoringConfig {
-        public static final int STANDARD_MAX_CONNECTION = 4030;
-        public static final int STANDARD_ROOM_LDR = 150;
-        public static final int STANDARD_ROOM_TEMPERATURE = 40; // TODO FIX
-        public static final int STANDARD_ROOM_HUMIDITY = 40; // TODO FIX
+    public static class MonitoringConfigKey {
+        public static final String STANDARD_MAX_CONNECTION = "STANDARD_MAX_CONNECTION";
+        public static final String STANDARD_ROOM_LDR = "STANDARD_ROOM_LDR";
+        public static final String STANDARD_ROOM_TEMPERATURE = "STANDARD_ROOM_TEMPERATURE";
+        public static final String STANDARD_ROOM_HUMIDITY = "STANDARD_ROOM_HUMIDITY";
     }
 
     public static class Query {
         public static final String SHOW_VARIABLES = "SHOW VARIABLES";
+        public static final String SELECT_MONITORING_CONFIG = "SELECT * FROM ssu.monitoring_config";
         public static final String SELECT_STUDENT = "SELECT * FROM ssu.student";
         public static final String INSERT_STUDENT = "INSERT INTO ssu.student(`id`, `name`, `age`) VALUES(20192762, '박수빈', 26)";
         public static final String REMOVE_STUDENT = "DELETE FROM ssu.student WHERE `id` = 20192762";
