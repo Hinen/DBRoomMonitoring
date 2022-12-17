@@ -30,7 +30,9 @@ public class MonitoringManager {
     }
 
     public void start() {
-        System.out.println("----------\nCHECK TIME : " + DateManager.get().getNowTime());
+        System.out.println("----------\nCHECK TIME : " + DateManager.get().getNowTime() +
+                " (Temp : " + SerialManager.get().getTemperatureValue() +
+                ", Humi : " + SerialManager.get().getHumidityValue() + ")");
 
         updateConfigMap();
         checkVariables();
