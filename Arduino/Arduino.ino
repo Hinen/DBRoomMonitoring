@@ -1,5 +1,9 @@
+#include <dht11.h>
+
 int roomLDR = 0;
 int initLDRValue = 0;
+
+dht11 dht;
 
 void setup() {
   initLDR();
@@ -15,7 +19,7 @@ void initLDR() {
 
 void loop() {
   writeLDR();
-  delay(100);
+  writeTempHumi();
 }
 
 void writeLDR() {
@@ -27,4 +31,15 @@ void writeLDR() {
       : ldrValue;
   
   Serial.println("ldr : " + String(ldrValue));
+
+  delay(100);
+}
+
+void writeTempHumi() {
+  dht.read(A1);
+
+  Serial.println("temp : " + String(dht.temperature));
+  Serial.println("humi : " + String(dht.humidity));
+
+  delay(1000);
 }
